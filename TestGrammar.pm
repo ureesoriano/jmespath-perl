@@ -1,16 +1,22 @@
 package TestGrammar;
 
-use Regexp::Grammars;
+use File::Slurp;
+use strict;
+use warnings;
 
-$matcher = qr{
+sub parse {
+  my ($self, $input) = @_;
+
+  use Regexp::Grammars;
+  #my $grammar = read_file('jmespath.regexp');
+  my $matcher = qr{
+<logfile: - >
+<expression>
+
 <rule: expression>
   <sub_expression> | <index_expression> | <or_expression> | <identifier>
-
-<rule: expression>
-  \* | <multi_select_list> | <multi_select_hash> | <literal>
-
-<rule: expression>
-  <function_expression> | <pipe_expression>
+| \* | <multi_select_list> | <multi_select_hash> | <literal>
+| <function_expression> | <pipe_expression>
 
 <rule: sub_expression>
   (?: <expression>\.<identifier> | <multi_select_list> | <multi_select_hash> | <function_expression> | \* )
@@ -35,9 +41,7 @@ $matcher = qr{
 
 <rule: bracket_specifier>
   (?: \[<number> | \* | <slice_expression>\] ) | \[\]
-
-<rule: bracket_specifier>
-  (?: \[\?<list_filter_expr>\] )
+| (?: \[\?<list_filter_expr>\] )
 
 <rule: list_filter_expr>
   (?: <expression><comparator><expression> )
@@ -163,13 +167,13 @@ $matcher = qr{
   \x65 | \x45
 
 <rule: exp>
-  (?: <e> (?: <minus> | <plus> )?  (?: <DIGIT> )+  )
+  (?: <e> (?: <minus> | <plus> )?  (?: <digit> )+  )
 
 <rule: frac>
-  (?: <decimal_point> (?: <DIGIT> )+  )
+  (?: <decimal_point> (?: <digit> )+  )
 
 <rule: int>
-  <zero> | (?: <digit1_9> (?: <DIGIT> )*  )
+  <zero> | (?: <digit1_9> (?: <digit> )*  )
 
 <rule: minus>
   \x2D
@@ -179,14 +183,15 @@ $matcher = qr{
 
 <rule: zero>
   \x30
-}xms;
+}x;
 
-sub parse {
-    my ($self, $input) = @_;
-if ($input_text =~ $matcher) {
-
-}
-
+  if ($input =~ $matcher) {
+    my %x = %/;
+    use Data::Dumper;
+    print Dumper(\%x);
+  } else {
+    print STDERR "$_\n" for (@!);
+  }
 }
 
 1;

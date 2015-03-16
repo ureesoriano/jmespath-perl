@@ -1,0 +1,6 @@
+
+use TestGrammar;
+
+my $expr = join ' ', @ARGV;
+
+TestGrammar->parse($expr);
