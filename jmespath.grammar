@@ -34,7 +34,7 @@ unescaped-literal = %x20-21 /       ; space !
                         %x61-7A     ; a-z
                         %x7C-10FFFF ; |}~ ...
 escaped-literal   = escaped-char / (escape %x60)
-number            = ["-"]1*digit
+number            = ["-"] 1*digit
 digit             = %x30-39
 identifier        = unquoted-string / quoted-string
 unquoted-string   = (%x41-5A / %x61-7A / %x5F) *(  ; a-zA-Z_
@@ -92,4 +92,5 @@ int = zero / ( digit1-9 *DIGIT )
 minus = %x2D               ; -
 plus = %x2B                ; +
 zero = %x30                ; 0
+
 
